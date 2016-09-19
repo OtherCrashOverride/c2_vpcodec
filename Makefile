@@ -71,7 +71,7 @@ ifeq ($(REAP), 1)
 CFLAGS+=-DREAP_MODE
 endif
 
-CFLAGS+= -g -ftree-vectorize -ffast-math -Iinclude -shared -fPIC
+CFLAGS+= -Wall -g -ftree-vectorize -ffast-math -Iinclude -shared -fPIC
 
 clean:
 	-rm -f *.o
