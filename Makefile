@@ -62,14 +62,14 @@ LDFLAGS += -lm -lrt
 ifeq ($(ARM), 1)
 CFLAGS+=-DARM
 else
-CFLAGS+=-O2 -std=c99
+CFLAGS+=-O2
 endif
 
 ifeq ($(REAP), 1)
 CFLAGS+=-DREAP_MODE
 endif
 
-CFLAGS+= -g -mfloat-abi=softfp -mfpu=neon -ftree-vectorize -ffast-math -Iinclude -shared
+CFLAGS+= -g -ftree-vectorize -ffast-math -Iinclude -shared -fPIC
 
 clean:
 	-rm -f *.o
