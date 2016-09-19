@@ -57,7 +57,7 @@ pred.o: enc/intra_search/pred.cpp enc/intra_search/pred.h
 #pred_neon_asm.o: enc/intra_search/pred_neon_asm.s
 #	$(CC) $(CFLAGS)  -c $<
 
-libvpcodec.o: libvpcodec.cpp vpcodec_1_0.h
+libvpcodec.o: libvpcodec.cpp include/vpcodec_1_0.h
 	$(CC) $(CFLAGS)  -c $<
 
 LDFLAGS += -lm -lrt
