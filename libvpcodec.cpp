@@ -1,7 +1,7 @@
 #include "vpcodec_1_0.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <utils/Log.h>
+//#include <utils/Log.h>
 
 #include <AML_HWEncoder.h>
 #include <enc_define.h>
@@ -16,19 +16,19 @@ const char *vl_get_version()
 int initEncParams(AMVEncHandle *handle, int width, int height, int frame_rate, int bit_rate, int gop)
 {
     memset(&(handle->mEncParams), 0, sizeof(AMVEncParams));
-    ALOGD("bit_rate:%d", bit_rate);
+    //ALOGD("bit_rate:%d", bit_rate);
     if ((width % 16 != 0 || height % 2 != 0))
     {
-        ALOGE("Video frame size %dx%d must be a multiple of 16", width, height);
+        //ALOGE("Video frame size %dx%d must be a multiple of 16", width, height);
         return -1;
     }
     else if (height % 16 != 0)
     {
-        ALOGD("Video frame height is not standard:%d", height);
+        //ALOGD("Video frame height is not standard:%d", height);
     }
     else
     {
-        ALOGD("Video frame size is %d x %d", width, height);
+        //ALOGD("Video frame size is %d x %d", width, height);
     }
     handle->mEncParams.rate_control = AVC_ON;
     handle->mEncParams.initQP = 0;
@@ -115,14 +115,14 @@ int vl_video_encoder_encode(vl_codec_handle_t codec_handle, vl_frame_type_t fram
             {
                 handle->mSPSPPSDataSize = in_size;
                 memcpy(handle->mSPSPPSData, (unsigned char *)*out, handle->mSPSPPSDataSize);
-                ALOGI("get mSPSPPSData size= %d at line %d \n", handle->mSPSPPSDataSize, __LINE__);
+                //ALOGI("get mSPSPPSData size= %d at line %d \n", handle->mSPSPPSDataSize, __LINE__);
             }
             handle->mNumInputFrames = 0;
             handle->mSpsPpsHeaderReceived = true;
         }
         else
         {
-            ALOGE("Encode SPS and PPS error, encoderStatus = %d. handle: %p", ret, (void *)handle);
+            //ALOGE("Encode SPS and PPS error, encoderStatus = %d. handle: %p", ret, (void *)handle);
             return -1;
         }
     }
@@ -137,8 +137,8 @@ int vl_video_encoder_encode(vl_codec_handle_t codec_handle, vl_frame_type_t fram
         videoInput.frame_rate = handle->mEncParams.frame_rate / 1000;
         videoInput.coding_timestamp = handle->mNumInputFrames * 1000 / videoInput.frame_rate;  // in ms
         videoInput.fmt = AMVENC_NV21;
-        videoInput.YCbCr[0] = (unsigned)in;
-        videoInput.YCbCr[1] = (unsigned)(videoInput.YCbCr[0] + videoInput.height * videoInput.pitch);
+        videoInput.YCbCr[0] = (unsigned long)in;
+        videoInput.YCbCr[1] = (unsigned long)(videoInput.YCbCr[0] + videoInput.height * videoInput.pitch);
         videoInput.YCbCr[2] = 0;
         videoInput.canvas = 0xffffffff;
         videoInput.type = VMALLOC_BUFFER;
@@ -167,7 +167,7 @@ int vl_video_encoder_encode(vl_codec_handle_t codec_handle, vl_frame_type_t fram
         }
         else if (ret < AMVENC_SUCCESS)
         {
-            ALOGE("encoderStatus = %d at line %d, handle: %p", ret, __LINE__, (void *)handle);
+            //ALOGE("encoderStatus = %d at line %d, handle: %p", ret, __LINE__, (void *)handle);
             return -1;
         }
 
@@ -180,7 +180,7 @@ int vl_video_encoder_encode(vl_codec_handle_t codec_handle, vl_frame_type_t fram
                 {
                     memcpy((uint8_t *) *out, handle->mSPSPPSData, handle->mSPSPPSDataSize);
                     dataLength += handle->mSPSPPSDataSize;
-                    ALOGI("copy mSPSPPSData to buffer size= %d at line %d \n", handle->mSPSPPSDataSize, __LINE__);
+                    //ALOGI("copy mSPSPPSData to buffer size= %d at line %d \n", handle->mSPSPPSDataSize, __LINE__);
                 }
             }
         }
@@ -192,7 +192,7 @@ int vl_video_encoder_encode(vl_codec_handle_t codec_handle, vl_frame_type_t fram
                 handle->mKeyFrameRequested = true;
                 ret = AMVENC_SKIPPED_PICTURE;
             }
-            ALOGD("ret = %d at line %d, handle: %p", ret, __LINE__, (void *)handle);
+            //ALOGD("ret = %d at line %d, handle: %p", ret, __LINE__, (void *)handle);
         }
         else if (ret != AMVENC_SUCCESS)
         {
@@ -201,7 +201,7 @@ int vl_video_encoder_encode(vl_codec_handle_t codec_handle, vl_frame_type_t fram
 
         if (ret < AMVENC_SUCCESS)
         {
-            ALOGE("encoderStatus = %d at line %d, handle: %p", ret , __LINE__, (void *)handle);
+            //ALOGE("encoderStatus = %d at line %d, handle: %p", ret , __LINE__, (void *)handle);
             return -1;
         }
     }

@@ -9,7 +9,7 @@ endif
 
 TARGET= libvpcodec.so
  
-CODEOBJECT = AML_HWEncoder.o enc_api.o gxvenclib_fast.o rate_control_gx_fast.o parser.o  \
+CODEOBJECT = AML_HWEncoder.o enc_api.o gxvenclib_fast.o rate_control_gx_fast.o parser.o libvpcodec.o  \
 #		rate_control_m8_fasth.o m8venclib_fast.o dump.o m8venclib.o rate_control_m8.o noise_reduction.o  fill_buffer.o  pred_neon_asm.o 
 
 libvpcodec.so: $(CODEOBJECT)
@@ -57,6 +57,8 @@ pred.o: enc/intra_search/pred.cpp enc/intra_search/pred.h
 #pred_neon_asm.o: enc/intra_search/pred_neon_asm.s
 #	$(CC) $(CFLAGS)  -c $<
 
+libvpcodec.o: libvpcodec.cpp vpcodec_1_0.h
+	$(CC) $(CFLAGS)  -c $<
 
 LDFLAGS += -lm -lrt
 ifeq ($(ARM), 1)

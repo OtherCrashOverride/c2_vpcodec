@@ -39,7 +39,7 @@ extern "C" {
      *
      *@return : codec version
      */
-    const char *vl_get_version();
+    extern const char *vl_get_version();
 
     /**
      * initialize encoder codec 
@@ -53,7 +53,7 @@ extern "C" {
      *@param : img_format
      *@return : if success return encoder codec handle，else return <= 0
      */
-    vl_codec_handle_t vl_video_encoder_init(vl_codec_id_t codec_id, int width, int height, int frame_rate, int bit_rate, int gop, vl_img_format_t img_format);
+	extern vl_codec_handle_t vl_video_encoder_init(vl_codec_id_t codec_id, int width, int height, int frame_rate, int bit_rate, int gop, vl_img_format_t img_format);
 
     /**
      * encode image 
@@ -65,7 +65,7 @@ extern "C" {
      *@param : out: out put data
      *@return ：if success return the data lenght of out put data, else return <= 0
      */
-    int vl_video_encoder_encode(vl_codec_handle_t handle, vl_frame_type_t type, char *in, int in_size, char **out);
+	extern int vl_video_encoder_encode(vl_codec_handle_t handle, vl_frame_type_t type, char *in, int in_size, char **out);
 
     /**
      * destroy encoder
@@ -73,7 +73,7 @@ extern "C" {
      *@param ：handle:  encoder handle
      *@return ：if succes return 1，else 0
      */
-    int vl_video_encoder_destory(vl_codec_handle_t handle);
+	extern int vl_video_encoder_destory(vl_codec_handle_t handle);
 
 
 #ifdef __cplusplus
