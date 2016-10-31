@@ -16,14 +16,15 @@
 #include "enc_api.h"
 //#include <cutils/properties.h>
 
-//#if !defined(__aarch64__)
-//#include "enc/m8_enc_fast/m8venclib_fast.h"
-//#include "enc/m8_enc_fast/rate_control_m8_fast.h"
+#if !defined(__aarch64__)
+#include "enc/m8_enc_fast/m8venclib_fast.h"
+#include "enc/m8_enc_fast/rate_control_m8_fast.h"
 //#include "enc/m8_enc/m8venclib.h"
 //#include "enc/m8_enc/rate_control_m8.h"
-//#endif
+#else
 #include "enc/gx_enc_fast/gxvenclib_fast.h"
 #include "enc/gx_enc_fast/rate_control_gx_fast.h"
+#endif
 
 #define ENCODER_PATH       "/dev/amvenc_avc"
 
@@ -35,6 +36,24 @@
 #define AMVENC_AVC_IOC_MAGIC  'E'
 #define AMVENC_AVC_IOC_GET_DEVINFO 				_IOW(AMVENC_AVC_IOC_MAGIC, 0xf0, unsigned int)
 
+#if !defined(__aarch64__)
+const AMVencHWFuncPtr m8_fast_dev = {
+    InitFastEncode,
+    FastEncodeInitFrame,
+    FastEncodeSPS_PPS,
+    FastEncodeSlice,
+    FastEncodeCommit,
+    UnInitFastEncode,
+};
+
+const AMVencRCFuncPtr m8_fast_rc = {
+    FastInitRateControlModule,
+    FastRCUpdateBuffer,
+    FastRCUpdateFrame,
+    FastRCInitFrameQP,
+    FastCleanupRateControlModule,
+};
+#else
 const AMVencHWFuncPtr gx_fast_dev = {
     GxInitFastEncode,
     GxFastEncodeInitFrame,
@@ -51,6 +70,7 @@ const AMVencRCFuncPtr gx_fast_rc = {
     GxFastRCInitFrameQP,
     GxFastCleanupRateControlModule,
 };
+#endif
 
 //#if !defined(__aarch64__)
 //const AMVencHWFuncPtr m8_fast_dev = {
@@ -96,8 +116,13 @@ const AMVencHWFuncPtr *gdev[] = {
 //    &m8_fast_dev,
 //    &m8_dev,
 //#endif
+#if !defined(__aarch64__)
+    &m8_fast_dev,
+	NULL,
+#else
     &gx_fast_dev,
     NULL,
+#endif
 };
 
 const AMVencRCFuncPtr *grc[] = {
@@ -108,8 +133,13 @@ const AMVencRCFuncPtr *grc[] = {
 //    &m8_fast_rc,
 //    &m8_rc,
 //#endif
+#if !defined(__aarch64__)
+	&m8_fast_rc,
+	NULL,
+#else
     &gx_fast_rc,
     NULL,
+#endif
 };
 
 AMVEnc_Status AMInitRateControlModule(amvenc_hw_t* hw_info)
